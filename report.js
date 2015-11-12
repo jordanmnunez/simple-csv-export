@@ -1,6 +1,27 @@
+$('head')
+    .prepend('<link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">')
+    .prepend('<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/jordanmnunez/simple-csv-export/master/main.css">')
+    .append('<script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/0.9.0/dist/progressbar.js"></script>')
+    .append('<script src="https://cdn.rawgit.com/jordanmnunez/mp-platform-people-pager/master/peoplepager.js"></script>');
+$('body').attr("class", "mixpanel-platform-body")
+    .append(
+        $('<div />').attr("class", "loading")
+            .append($('<div />').attr("id", "progress")))
+    .append($('<div />').attr("class", "report-body")
+        .append(
+            $('<div />').attr("class", "labels")
+                .append($('<div />').attr("class", "dropdown").text('Avaliable'))
+                .append($('<div />').attr("class", "dropdown").text('Included')))
+        .append(
+            $('<div />').attr("class", "selectors")
+                .append($('<div />').attr("class", "dropdown").attr('id','propsSelect'))
+                .append($('<div />').attr("class", "dropdown").attr('id','propsChosen')))
+        .append(
+            $('<div />').attr("class", "submit")
+                .append($('<button />').attr("class", "button_primary button").text("download users")))
+    );
 var exp = {}
 $(function() {
-
     exp.csv;
     exp.filename = 'people.csv';
     exp.headers = [];
