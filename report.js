@@ -1,38 +1,38 @@
-$('head')
+$("head")
     .prepend('<link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">')
     .prepend('<link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/jordanmnunez/simple-csv-export/master/main.css">')
     .append('<script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/0.9.0/dist/progressbar.js"></script>')
     .append('<script src="https://cdn.rawgit.com/jordanmnunez/mp-platform-people-pager/master/peoplepager.js"></script>');
-$('body').attr("class", "mixpanel-platform-body")
+$("body").attr("class", "mixpanel-platform-body")
     .append(
-        $('<div />').attr("class", "loading")
-            .append($('<div />').attr("id", "progress")))
-    .append($('<div />').attr("class", "report-body")
+        $("<div />").attr("class", "loading")
+            .append($("<div />").attr("id", "progress")))
+    .append($("<div />").attr("class", "report-body")
         .append(
-            $('<div />').attr("class", "labels")
-                .append($('<div />').attr("class", "dropdown").text('Avaliable'))
-                .append($('<div />').attr("class", "dropdown").text('Included')))
+            $("<div />").attr("class", "labels")
+                .append($("<div />").attr("class", "dropdown").text("Avaliable"))
+                .append($("<div />").attr("class", "dropdown").text("Included")))
         .append(
-            $('<div />').attr("class", "selectors")
-                .append($('<div />').attr("class", "dropdown").attr('id','propsSelect'))
-                .append($('<div />').attr("class", "dropdown").attr('id','propsChosen')))
+            $("<div />").attr("class", "selectors")
+                .append($("<div />").attr("class", "dropdown").attr("id","propsSelect"))
+                .append($("<div />").attr("class", "dropdown").attr("id","propsChosen")))
         .append(
-            $('<div />').attr("class", "submit")
-                .append($('<button />').attr("class", "button_primary button").text("download users")))
+            $("<div />").attr("class", "submit")
+                .append($("<button />").attr("class", "button_primary button").text("download users")))
     );
 var exp = {}
 $(function() {
     exp.csv;
-    exp.filename = 'people.csv';
+    exp.filename = "people.csv";
     exp.headers = [];
     exp.csvMax = Math.pow(10, 6) * 2;
-    exp.$download = $('button');
+    exp.$download = $("button");
     exp.$listSelect = $('<select class="proplist" size="10"/>');
     exp.$listChosen = $('<select class="proplist" size="10"/>');
     exp.$include = $('<button id="include" class="listbutton button"/>').text('add');
     exp.$remove = $('<button id="remove" class="listbutton button"/>').text('remove');
-    exp.$reportbody = $('.report-body');
-    exp.$loading = $('div.loading');
+    exp.$reportbody = $(".report-body");
+    exp.$loading = $("div.loading");
     exp.progressCircle;
     exp.lastPercent = 0;
 
@@ -46,42 +46,42 @@ $(function() {
         exp.headers.forEach(function(prop) {
             if (user.hasOwnProperty(prop)) {
                 var value = user[prop]
-                if (typeof user[prop] == 'object') {
-                    if (prop == '$transactions') {
+                if (typeof user[prop] == "object") {
+                    if (prop == "$transactions") {
                         vals.push(exp.tallyRevenue(user[prop]));
                     } else {
-                        vals.push('object');
+                        vals.push("object");
                     }
                 } else {
-                    if (value.indexOf && value.indexOf(',') > 0) {
-                        value = value.replace(/[,]/g, '');
+                    if (value.indexOf && value.indexOf(",") > 0) {
+                        value = value.replace(/[,]/g, "");
                     }
                     vals.push(value)
                 }
             } else {
-                vals.push('')
+                vals.push("")
             }
         })
-        exp.csv += encodeURI('\n' + vals.join())
+        exp.csv += encodeURI("\n" + vals.join())
         if (exp.csv.length > exp.csvMax) {
             exp.downloadCSV()
         }
     }
 
     exp.downloadCSV = function() {
-        var link = document.createElement('a');
-        link.setAttribute('href', exp.csv);
-        link.setAttribute('download', exp.filename);
+        var link = document.createElement("a");
+        link.setAttribute("href", exp.csv);
+        link.setAttribute("download", exp.filename);
         link.click();
         $(link).remove();
-        exp.csv = encodeURI('data:text/csv;charset=utf-8,' + encodeURI(exp.headers.join()));
+        exp.csv = encodeURI("data:text/csv;charset=utf-8," + encodeURI(exp.headers.join()));
     }
 
     exp.tallyRevenue = function(transactions) {
         var total = 0;
         if (transactions instanceof Array) {
             transactions.forEach(function(item) {
-                total += item['$amount']
+                total += item["$amount"]
             })
         }
         return total
@@ -96,31 +96,31 @@ $(function() {
 
     exp.loading = function(status) {
         if (status === true) {
-            exp.$reportbody.css('-webkit-filter', 'blur(3px)');
+            exp.$reportbody.css("-webkit-filter", "blur(3px)");
             exp.$loading.show();
         } else if (status === false) {
-            exp.$reportbody.css('-webkit-filter', 'blur(0px)');
+            exp.$reportbody.css("-webkit-filter", "blur(0px)");
             exp.$loading.hide();
         }
     }
 
     exp.run = function() {
-        exp.$include.on('click', function() {
+        exp.$include.on("click", function() {
             var selected = exp.$listSelect.val();
-            exp.$listSelect.find('option:selected').remove();
-            exp.$listChosen.append($('<option />').attr('value', selected).text(selected));
+            exp.$listSelect.find("option:selected").remove();
+            exp.$listChosen.append($("<option />").attr("value", selected).text(selected));
         });
-        exp.$remove.on('click', function() {
+        exp.$remove.on("click", function() {
             var selected = exp.$listChosen.val();
-            exp.$listChosen.find('option:selected').remove();
-            exp.$listSelect.append($('<option />').attr('value', selected).text(selected));
+            exp.$listChosen.find("option:selected").remove();
+            exp.$listSelect.append($("<option />").attr("value", selected).text(selected));
         });
-        exp.$download.on('click', function() {
+        exp.$download.on("click", function() {
             exp.loading(true);
             var whereProps = [];
             exp.headers = [];
-            exp.$listChosen.find('option').each(function(i, el) {
-                var prop = el.getAttribute('value');
+            exp.$listChosen.find("option").each(function(i, el) {
+                var prop = el.getAttribute("value");
                 if (prop !== "$distinct_id") {
                     whereProps.push('(defined (properties["' + prop + '"]))');
                 }
@@ -129,20 +129,20 @@ $(function() {
             if (whereProps.length > 0) {
                 var selector = whereProps.join(" or ");
             }
-            exp.csv = encodeURI('data:text/csv;charset=utf-8,' + encodeURI(exp.headers.join()));
-            PeoplePager(exp.processUser, exp.selector, exp.finishProcessing);
+            exp.csv = encodeURI("data:text/csv;charset=utf-8," + encodeURI(exp.headers.join()));
+            PeoplePager(exp.processUser, selector, exp.finishProcessing);
         });
 
         exp.progressCircle = new ProgressBar.Circle("#progress", {
-            color: '#FCB03C',
+            color: "#FCB03C",
             strokeWidth: 5,
             trailWidth: 3,
             duration: 250,
             text: {
-                value: '0',
+                value: "0",
                 style: {
                     "font-size": "75px",
-                    "font-family": 'proxima-nova, sans-serif'
+                    "font-family": "proxima-nova, sans-serif"
                 }
             },
             step: function(state, bar) {
@@ -151,14 +151,14 @@ $(function() {
         });
     }
 
-    MP.api.query('api/2.0/engage/properties', {limit: '2000'}).done(function(d) {
-        exp.$listChosen.append($('<option value="$distinct_id" />').text('$distinct_id'));
+    MP.api.query("api/2.0/engage/properties", {limit: "2000"}).done(function(d) {
+        exp.$listChosen.append($('<option value="$distinct_id" />').text("$distinct_id"));
         for (prop in d.results) {
-            exp.$listSelect.append($('<option />').attr('value', prop).text(prop));
+            exp.$listSelect.append($("<option />").attr("value", prop).text(prop));
         }
-        $('#propsSelect').append(exp.$listSelect);
+        $("#propsSelect").append(exp.$listSelect);
         exp.$listSelect.after(exp.$include);
-        $('#propsChosen').append(exp.$listChosen);
+        $("#propsChosen").append(exp.$listChosen);
         exp.$listChosen.after(exp.$remove);
         exp.loading(false);
         exp.run();
